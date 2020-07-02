@@ -43,11 +43,16 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     async function loadTransactions(): Promise<void> {
-      api.get('/transactions').then(response => {
-        setTransactions(response.data.transactions);
-        setBalance(response.data.balance);
-        setLoading(false);
-      });
+      const response = await api.get('/transactions');
+      setTransactions(response.data.transactions);
+
+      const balanceFormated = {
+        income: formatValue(response.data.balance.income),
+        outcome: formatValue(response.data.balance.outcome),
+        total: formatValue(response.data.balance.total),
+      };
+      setBalance(balanceFormated);
+      setLoading(false);
     }
 
     loadTransactions();
@@ -64,11 +69,7 @@ const Dashboard: React.FC = () => {
               <img src={income} alt="Income" />
             </header>
             <h1 data-testid="balance-income">
-              {loading ? (
-                <Skeleton>R$ 0</Skeleton>
-              ) : (
-                formatValue(Number(balance.income))
-              )}
+              {loading ? <Skeleton>R$ 0</Skeleton> : balance.income}
             </h1>
           </Card>
           <Card>
@@ -77,11 +78,7 @@ const Dashboard: React.FC = () => {
               <img src={outcome} alt="Outcome" />
             </header>
             <h1 data-testid="balance-outcome">
-              {loading ? (
-                <Skeleton>R$ 0</Skeleton>
-              ) : (
-                formatValue(Number(balance.outcome))
-              )}
+              {loading ? <Skeleton>R$ 0</Skeleton> : balance.outcome}
             </h1>
           </Card>
           <Card total>
@@ -90,11 +87,7 @@ const Dashboard: React.FC = () => {
               <img src={total} alt="Total" />
             </header>
             <h1 data-testid="balance-total">
-              {loading ? (
-                <Skeleton>R$ 0</Skeleton>
-              ) : (
-                formatValue(Number(balance.total))
-              )}
+              {loading ? <Skeleton>R$ 0</Skeleton> : balance.total}
             </h1>
           </Card>
         </CardContainer>
@@ -114,7 +107,7 @@ const Dashboard: React.FC = () => {
 
               <tbody>
                 {transactions.map(transaction => (
-                  <tr>
+                  <tr key={transaction.id}>
                     <td className="title">{transaction.title}</td>
                     {transaction.type === 'income' ? (
                       <td className="income">
