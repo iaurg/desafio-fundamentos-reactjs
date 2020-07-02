@@ -122,7 +122,7 @@ const Dashboard: React.FC = () => {
                       </td>
                     ) : (
                       <td className="outcome">
-                        - {formatValue(transaction.value)}
+                        {`- ${formatValue(transaction.value)}`}
                       </td>
                     )}
                     <td>
