@@ -10,7 +10,13 @@ import Header from '../../components/Header';
 
 import formatValue from '../../utils/formatValue';
 
-import { Container, CardContainer, Card, TableContainer } from './styles';
+import {
+  Container,
+  CardContainer,
+  Card,
+  TableContainer,
+  Skeleton,
+} from './styles';
 
 interface Transaction {
   id: string;
@@ -30,12 +36,15 @@ interface Balance {
 }
 
 const Dashboard: React.FC = () => {
-  // const [transactions, setTransactions] = useState<Transaction[]>([]);
-  // const [balance, setBalance] = useState<Balance>({} as Balance);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [balance, setBalance] = useState<Balance>({} as Balance);
 
   useEffect(() => {
     async function loadTransactions(): Promise<void> {
-      // TODO
+      api.get('/transactions').then(response => {
+        setTransactions(response.data.transactions);
+        setBalance(response.data.balance);
+      });
     }
 
     loadTransactions();
@@ -51,21 +60,39 @@ const Dashboard: React.FC = () => {
               <p>Entradas</p>
               <img src={income} alt="Income" />
             </header>
-            <h1 data-testid="balance-income">R$ 5.000,00</h1>
+            <h1 data-testid="balance-income">
+              {balance.income === undefined ? (
+                <Skeleton>R$ 0</Skeleton>
+              ) : (
+                formatValue(Number(balance.income))
+              )}
+            </h1>
           </Card>
           <Card>
             <header>
               <p>Saídas</p>
               <img src={outcome} alt="Outcome" />
             </header>
-            <h1 data-testid="balance-outcome">R$ 1.000,00</h1>
+            <h1 data-testid="balance-outcome">
+              {balance.outcome === undefined ? (
+                <Skeleton>R$ 0</Skeleton>
+              ) : (
+                formatValue(Number(balance.outcome))
+              )}
+            </h1>
           </Card>
           <Card total>
             <header>
               <p>Total</p>
               <img src={total} alt="Total" />
             </header>
-            <h1 data-testid="balance-total">R$ 4000,00</h1>
+            <h1 data-testid="balance-total">
+              {balance.total === undefined ? (
+                <Skeleton>R$ 0</Skeleton>
+              ) : (
+                formatValue(Number(balance.total))
+              )}
+            </h1>
           </Card>
         </CardContainer>
 

@@ -93,3 +93,8 @@ export const TableContainer = styled.section`
     }
   }
 `;
+
+export const Skeleton = styled.span`
+  color: transparent;
+  text-shadow: 0 0 9px rgba(0, 0, 0, 0.5);
+`;
