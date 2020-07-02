@@ -98,3 +98,22 @@ export const Skeleton = styled.span`
   color: transparent;
   text-shadow: 0 0 9px rgba(0, 0, 0, 0.5);
 `;
+
+export const Loader = styled.div`
+  border: 16px solid #969cb3; /* Light grey */
+  border-top: 16px solid #5636d3; /* Blue */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin: 8% auto;
+  animation: spin 2s linear infinite;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
